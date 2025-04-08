@@ -29,6 +29,10 @@ public class ProductController {
 		return ResponseEntity.ok(productService.getAllProduct());
 	}
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8d33ba3b311f9e0fc6e6e3208a2f12b0241907d4
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductDTO> getProductById(@PathVariable long id) {
 		ProductDTO product = productService.getProductById(id);
@@ -52,12 +56,19 @@ public class ProductController {
 		return ResponseEntity.ok(created);
 	}
 
+<<<<<<< HEAD
 
 
 	// PUT existing product (UPDATE)
 	@PutMapping("/{id}")
 	public ResponseEntity<ProductDTO> updateProduct(@PathVariable long id, @RequestBody ProductDTO productDTO) {
 		productDTO.setId(id);
+=======
+	// PUT existing product (UPDATE)
+	@PutMapping("/{id}")
+	public ResponseEntity<ProductDTO> updateProduct(@PathVariable long id, @RequestBody ProductDTO productDTO) {
+		productDTO.setId(id); 
+>>>>>>> 8d33ba3b311f9e0fc6e6e3208a2f12b0241907d4
 		try {
 			ProductDTO updated = productService.saveProduct(productDTO);
 			return ResponseEntity.ok(updated);
