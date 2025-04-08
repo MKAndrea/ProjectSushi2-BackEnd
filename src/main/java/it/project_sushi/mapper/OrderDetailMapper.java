@@ -9,33 +9,13 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 
-<<<<<<< HEAD
-@Mapper(componentModel = "spring")//uses = {ProductMapper.class,OrderMapper.class }//)
-public interface OrderDetailMapper {
-//	OrderDetailMapper ISTANCE=Mappers.getMapper(OrderDetailMapper.class);
-
-//	@Mapping(target = "product", source = "product", qualifiedByName = "toCartProductDTO")
-	 OrderDetailDTO toDto(OrderDetail detail); //{
-//	    OrderDetailDTO dto = new OrderDetailDTO();
-//
-//	    Product product = detail.getProduct();
-//	    int quantity = detail.getQuantity();
-//
-//
-//	    ProductDTO cartProduct = ProductMapper.toCartProductDTO(product, quantity);
-//
-//	    dto.setQuantity(quantity);
-//	    dto.setProduct(cartProduct);
-//	    return dto;
-//	}
-=======
 @Mapper(componentModel = "spring",uses = {ProductMapper.class,OrderMapper.class })
 public interface OrderDetailMapper {
 	//OrderDetailMapper ISTANCE=Mappers.getMapper(OrderDetailMapper.class);
 
 	@Mapping(target = "product", source = "product", qualifiedByName = "toCartProductDTO")
-	 OrderDetailDTO toDto(OrderDetail detail); /*{
-	   /* OrderDetailDTO dto = new OrderDetailDTO();
+	default OrderDetailDTO toDto(OrderDetail detail) {
+	    OrderDetailDTO dto = new OrderDetailDTO();
 
 	    Product product = detail.getProduct();
 	    int quantity = detail.getQuantity();
@@ -46,11 +26,11 @@ public interface OrderDetailMapper {
 	    dto.setQuantity(quantity);
 	    dto.setProduct(cartProduct);
 	    return dto;
-	}*/
->>>>>>> 8d33ba3b311f9e0fc6e6e3208a2f12b0241907d4
+	}
 
-	//@Mapping(target = "product", source = "product")
-	//@Mapping(target = "id", ignore = true)
-	//@Mapping(target = "orders", ignore = true)
+
+	@Mapping(target = "product", source = "product")
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "orders", ignore = true)
 	OrderDetail toEntity(OrderDetailDTO dto);
 }

@@ -19,11 +19,8 @@
 
 	<properties>
 		<java.version>17</java.version>
-<<<<<<< HEAD
 		<mapstruct.version>1.6.0</mapstruct.version> <!-- Versione STABILE -->
-=======
 		<mapstruct.version>1.5.5.Final</mapstruct.version> <!-- Versione STABILE -->
->>>>>>> 8d33ba3b311f9e0fc6e6e3208a2f12b0241907d4
 		<lombok.version>1.18.30</lombok.version>
 	</properties>
 
@@ -63,10 +60,6 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-<<<<<<< HEAD
-=======
-			<version>${lombok.version}</version>
->>>>>>> 8d33ba3b311f9e0fc6e6e3208a2f12b0241907d4
 			<scope>provided</scope>
 		</dependency>
 
@@ -84,10 +77,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-<<<<<<< HEAD
-=======
-				<version>3.11.0</version>
->>>>>>> 8d33ba3b311f9e0fc6e6e3208a2f12b0241907d4
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
@@ -102,15 +91,11 @@
 							<artifactId>lombok</artifactId>
 							<version>${lombok.version}</version>
 						</path>
-<<<<<<< HEAD
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok-mapstruct-binding</artifactId>
 							<version>0.2.0</version>
 						</path>
-
-=======
->>>>>>> 8d33ba3b311f9e0fc6e6e3208a2f12b0241907d4
 					</annotationProcessorPaths>
 					<compilerArgs>
 						<arg>-Amapstruct.defaultComponentModel=spring</arg>

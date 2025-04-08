@@ -27,11 +27,7 @@ public class ProductServiceImpl implements ProductService {
 	public String getProductImageByName(String name) {
 		  return productRepository.findByName(name).stream()
 			        .findFirst()
-<<<<<<< HEAD
 			        .map(Product::getProductImage)
-=======
-			        .map(Product::getProduct_Image)
->>>>>>> 8d33ba3b311f9e0fc6e6e3208a2f12b0241907d4
 			        .orElse(null);
 	}
 	@Override
@@ -55,7 +51,6 @@ public class ProductServiceImpl implements ProductService {
 		Product saved = productRepository.save(product);
 		return productMapper.toDto(saved);
 	}
-<<<<<<< HEAD
 	@Override
 	public ProductDTO saveProduct2(ProductDTO productDTO) {
 		Product product = new Product();
@@ -68,9 +63,7 @@ public class ProductServiceImpl implements ProductService {
 		Product saved = productRepository.save(product);
 		return productDTO;
 	}
-=======
-
->>>>>>> 8d33ba3b311f9e0fc6e6e3208a2f12b0241907d4
+	
 	@Override
 	public ProductDTO deleteProduct(long id) {
 		ProductDTO product = productRepository.findById(id)

@@ -20,6 +20,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<mapstruct.version>1.6.0</mapstruct.version> <!-- Versione STABILE -->
+		<mapstruct.version>1.5.5.Final</mapstruct.version> <!-- Versione STABILE -->
 		<lombok.version>1.18.30</lombok.version>
 	</properties>
 
@@ -95,7 +96,6 @@
 							<artifactId>lombok-mapstruct-binding</artifactId>
 							<version>0.2.0</version>
 						</path>
-
 					</annotationProcessorPaths>
 					<compilerArgs>
 						<arg>-Amapstruct.defaultComponentModel=spring</arg>

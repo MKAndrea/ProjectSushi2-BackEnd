@@ -2,22 +2,24 @@ package it.project_sushi.mapper;
 
 import it.project_sushi.model.Order;
 import it.project_sushi.model.OrderDetail;
-import it.project_sushi.model.Product;
 import it.project_sushi.model.dto.OrderDTO;
 import it.project_sushi.model.dto.OrderDetailDTO;
-import it.project_sushi.model.dto.ProductDTO;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-04-08T14:14:04+0200",
+    date = "2025-04-08T14:56:36+0200",
     comments = "version: 1.6.0.Beta1, compiler: Eclipse JDT (IDE) 3.36.0.v20231114-0937, environment: Java 17.0.9 (Eclipse Adoptium)"
 )
 @Component
 public class OrderMapperImpl implements OrderMapper {
+
+    @Autowired
+    private OrderDetailMapper orderDetailMapper;
 
     @Override
     public OrderDTO toDto(Order order) {
@@ -27,8 +29,8 @@ public class OrderMapperImpl implements OrderMapper {
 
         OrderDTO orderDTO = new OrderDTO();
 
-        orderDTO.setId( order.getId() );
         orderDTO.setOrderDetails( orderDetailListToOrderDetailDTOList( order.getOrderDetails() ) );
+        orderDTO.setId( order.getId() );
 
         return orderDTO;
     }
@@ -47,36 +49,6 @@ public class OrderMapperImpl implements OrderMapper {
         return order;
     }
 
-    protected ProductDTO productToProductDTO(Product product) {
-        if ( product == null ) {
-            return null;
-        }
-
-        ProductDTO productDTO = new ProductDTO();
-
-        productDTO.setDescription( product.getDescription() );
-        productDTO.setId( product.getId() );
-        productDTO.setIngredients( product.getIngredients() );
-        productDTO.setName( product.getName() );
-        productDTO.setPrice( product.getPrice() );
-        productDTO.setProductImage( product.getProductImage() );
-
-        return productDTO;
-    }
-
-    protected OrderDetailDTO orderDetailToOrderDetailDTO(OrderDetail orderDetail) {
-        if ( orderDetail == null ) {
-            return null;
-        }
-
-        OrderDetailDTO orderDetailDTO = new OrderDetailDTO();
-
-        orderDetailDTO.setProduct( productToProductDTO( orderDetail.getProduct() ) );
-        orderDetailDTO.setQuantity( orderDetail.getQuantity() );
-
-        return orderDetailDTO;
-    }
-
     protected List<OrderDetailDTO> orderDetailListToOrderDetailDTOList(List<OrderDetail> list) {
         if ( list == null ) {
             return null;
@@ -84,40 +56,10 @@ public class OrderMapperImpl implements OrderMapper {
 
         List<OrderDetailDTO> list1 = new ArrayList<OrderDetailDTO>( list.size() );
         for ( OrderDetail orderDetail : list ) {
-            list1.add( orderDetailToOrderDetailDTO( orderDetail ) );
+            list1.add( orderDetailMapper.toDto( orderDetail ) );
         }
 
         return list1;
-    }
-
-    protected Product productDTOToProduct(ProductDTO productDTO) {
-        if ( productDTO == null ) {
-            return null;
-        }
-
-        Product product = new Product();
-
-        product.setDescription( productDTO.getDescription() );
-        product.setId( productDTO.getId() );
-        product.setIngredients( productDTO.getIngredients() );
-        product.setName( productDTO.getName() );
-        product.setPrice( productDTO.getPrice() );
-        product.setProductImage( productDTO.getProductImage() );
-
-        return product;
-    }
-
-    protected OrderDetail orderDetailDTOToOrderDetail(OrderDetailDTO orderDetailDTO) {
-        if ( orderDetailDTO == null ) {
-            return null;
-        }
-
-        OrderDetail orderDetail = new OrderDetail();
-
-        orderDetail.setProduct( productDTOToProduct( orderDetailDTO.getProduct() ) );
-        orderDetail.setQuantity( orderDetailDTO.getQuantity() );
-
-        return orderDetail;
     }
 
     protected List<OrderDetail> orderDetailDTOListToOrderDetailList(List<OrderDetailDTO> list) {
@@ -127,7 +69,7 @@ public class OrderMapperImpl implements OrderMapper {
 
         List<OrderDetail> list1 = new ArrayList<OrderDetail>( list.size() );
         for ( OrderDetailDTO orderDetailDTO : list ) {
-            list1.add( orderDetailDTOToOrderDetail( orderDetailDTO ) );
+            list1.add( orderDetailMapper.toEntity( orderDetailDTO ) );
         }
 
         return list1;
