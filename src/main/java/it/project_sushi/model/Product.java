@@ -11,17 +11,25 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name="name")
-    private String name;
-    @Column(name="ingredients")
-    private String ingredients;
-    @Column(name="description")
-    private String description;
-    @Column(name="price")
-    private double price;
-    @Column(name="productImage")
-    private String productImage;
+	public enum Category {
+		Cibo,
+		Bevande,
+		Dolci
+	}
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	@Column(name="name")
+	private String name;
+	@Column(name="ingredients")
+	private String ingredients;
+	@Column(name="description")
+	private String description;
+	@Column(name="price")
+	private double price;
+	@Column(name="productImage")
+	private String productImage;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "category")
+	private Category category;
 }

@@ -31,6 +31,14 @@ public class ProductServiceImpl implements ProductService {
 			        .orElse(null);
 	}
 	@Override
+	public List<ProductDTO> getProductsByCategory(Product.Category category) {
+	    return productRepository.findByCategory(category)
+	            .stream()
+	            .map(productMapper::toDto)
+	            .toList();
+	}
+
+	@Override
 	public ProductDTO getProductById(long id) {
 		return productRepository.findById(id)
 				.map(productMapper::toDto)
@@ -50,18 +58,6 @@ public class ProductServiceImpl implements ProductService {
 
 		Product saved = productRepository.save(product);
 		return productMapper.toDto(saved);
-	}
-	@Override
-	public ProductDTO saveProduct2(ProductDTO productDTO) {
-		Product product = new Product();
-		product.setName(productDTO.getName());
-		product.setDescription(productDTO.getDescription());
-		product.setIngredients(productDTO.getIngredients());
-		product.setPrice(productDTO.getPrice());
-		product.setProductImage(productDTO.getProductImage());
-
-		Product saved = productRepository.save(product);
-		return productDTO;
 	}
 	
 	@Override

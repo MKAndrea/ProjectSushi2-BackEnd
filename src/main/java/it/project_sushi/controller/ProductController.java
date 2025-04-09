@@ -2,6 +2,7 @@ package it.project_sushi.controller;
 
 import java.util.List;
 
+import it.project_sushi.model.Product;
 import it.project_sushi.model.dto.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,13 @@ public class ProductController {
 		ProductDTO product = productService.getProductById(id);
 		return (product != null) ? ResponseEntity.ok(product) : ResponseEntity.notFound().build();
 	}
-
+	
+	@GetMapping("/category/{category}")
+	public ResponseEntity<List<ProductDTO>> getByCategory(@PathVariable Product.Category category) {
+	    List<ProductDTO> products = productService.getProductsByCategory(category);
+	    return ResponseEntity.ok(products);
+	}
+	
 	@GetMapping("/image/{name}")
 	public ResponseEntity<String> getProductImageName(@PathVariable String name) {
 	    String imageName = productService.getProductImageByName(name);

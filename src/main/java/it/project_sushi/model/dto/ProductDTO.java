@@ -1,6 +1,8 @@
 package it.project_sushi.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import it.project_sushi.model.Product;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,4 +18,5 @@ public class ProductDTO {
     private String description;
     private double price;
     private String productImage;
+    private Product.Category category;
 }
