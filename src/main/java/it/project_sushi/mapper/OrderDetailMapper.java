@@ -6,7 +6,6 @@ import it.project_sushi.model.dto.OrderDetailDTO;
 import it.project_sushi.model.dto.ProductDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 
 @Mapper(componentModel = "spring",uses = {ProductMapper.class,OrderMapper.class })

@@ -9,7 +9,9 @@ import it.project_sushi.model.dto.OrderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import it.project_sushi.mapper.OrderDetailMapper;
 import it.project_sushi.mapper.OrderMapper;
+import it.project_sushi.mapper.ProductMapper;
 import it.project_sushi.repository.OrderRepository;
 import it.project_sushi.repository.ProductRepository;
 import it.project_sushi.service.OrderService;
@@ -23,6 +25,10 @@ public class OrderServiceImpl implements OrderService {
 	private OrderMapper orderMapper;
 	@Autowired
 	private ProductRepository productRepository;
+	@Autowired
+	private ProductMapper productMapper;
+	@Autowired
+	private OrderDetailMapper orderDetailMapper;
 	
 	@Override
 	public List<OrderDTO> getAllOrder() {
@@ -38,25 +44,39 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public OrderDTO saveOrder(OrderDTO orderDTO) {
-	    Order order = new Order();
+	    Order order;
 
+	    // Se è update
+	    if (orderDTO.getId() != null) {
+	        order = orderRepository.findById(orderDTO.getId())
+	            .orElseThrow(() -> new RuntimeException("Ordine non trovato con ID " + orderDTO.getId()));
+	        order.getOrderDetails().clear(); // cancella i vecchi dettagli
+	    } else {
+	        order = new Order(); // nuovo ordine
+	    }
+
+	    // Mappa gli OrderDetail
 	    List<OrderDetail> details = orderDTO.getOrderDetails().stream().map(detailDTO -> {
-	        OrderDetail detail = new OrderDetail();
+	        OrderDetail detail = orderDetailMapper.toEntity(detailDTO);
 
-	        Product product = detailDTO.getProduct() != null
-	                ? productRepository.findById(detailDTO.getProduct().getId())
-	                    .orElseThrow(() -> new RuntimeException("Prodotto non trovato"))
-	                : null;
+	        if (detailDTO.getProduct() != null) {
+	            Product product = productRepository.findById(detailDTO.getProduct().getId())
+	                .orElseThrow(() -> new RuntimeException("Prodotto non trovato"));
 
-	        detail.setProduct(product);
+	            // 🔁 Aggiorna i dati del prodotto esistente (nome, immagine, ecc.)
+	            productMapper.updateFromDto(detailDTO.getProduct(), product);
+	            product = productRepository.save(product); // salva le modifiche
+
+	            detail.setProduct(product);
+	        }
+
 	        detail.setOrders(order);
-	        detail.setQuantity(detailDTO.getQuantity());
 	        return detail;
 	    }).toList();
 
 	    order.setOrderDetails(details);
-
 	    Order saved = orderRepository.save(order);
+
 	    return orderMapper.toDto(saved);
 	}
 	

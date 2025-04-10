@@ -2,12 +2,14 @@ package it.project_sushi.serviceImpl;
 
 import java.util.List;
 
+import it.project_sushi.model.Order;
 import it.project_sushi.model.Product;
 import it.project_sushi.model.dto.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.project_sushi.mapper.ProductMapper;
+import it.project_sushi.repository.OrderRepository;
 import it.project_sushi.repository.ProductRepository;
 import it.project_sushi.service.ProductService;
 
@@ -18,6 +20,8 @@ public class ProductServiceImpl implements ProductService {
 	private ProductRepository productRepository;
 	@Autowired
 	private ProductMapper productMapper;
+	@Autowired
+	private OrderRepository orderRepository;
 
 	@Override
 	public List<ProductDTO> getAllProduct() {
@@ -25,17 +29,17 @@ public class ProductServiceImpl implements ProductService {
 	}
 	@Override
 	public String getProductImageByName(String name) {
-		  return productRepository.findByName(name).stream()
-			        .findFirst()
-			        .map(Product::getProductImage)
-			        .orElse(null);
+		return productRepository.findByName(name).stream()
+				.findFirst()
+				.map(Product::getProductImage)
+				.orElse(null);
 	}
 	@Override
 	public List<ProductDTO> getProductsByCategory(Product.Category category) {
-	    return productRepository.findByCategory(category)
-	            .stream()
-	            .map(productMapper::toDto)
-	            .toList();
+		return productRepository.findByCategory(category)
+				.stream()
+				.map(productMapper::toDto)
+				.toList();
 	}
 
 	@Override
@@ -59,12 +63,22 @@ public class ProductServiceImpl implements ProductService {
 		Product saved = productRepository.save(product);
 		return productMapper.toDto(saved);
 	}
-	
+
 	@Override
 	public ProductDTO deleteProduct(long id) {
+		// Elimina prima tutti i dettagli che usano questo prodotto
+		List<Order> orders = orderRepository.findAll();
+		for (Order order : orders) {
+			order.getOrderDetails().removeIf(detail -> 
+			detail.getProduct() != null && detail.getProduct().getId() == id
+					);
+		}
+
+		// Poi elimina il prodotto
 		ProductDTO product = productRepository.findById(id)
 				.map(productMapper::toDto)
 				.orElse(null);
+
 		productRepository.deleteById(id);
 		return product;
 	}

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,18 +41,28 @@ public class OrderController {
         }
     }
 
+    // 🛒 Crea o aggiorna un ordine (carrello) in modo smart
     @PostMapping("/cart")
-    public ResponseEntity<OrderDTO> addToCart(@RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<OrderDTO> saveOrUpdateCart(@RequestBody OrderDTO orderDTO) {
         OrderDTO saved = orderService.saveOrder(orderDTO);
         return ResponseEntity.ok(saved);
     }
 
+    // ✏️ Modifica esplicita di un carrello tramite ID
+    @PutMapping("/cart/{id}")
+    public ResponseEntity<OrderDTO> updateCart(@PathVariable Long id, @RequestBody OrderDTO orderDTO) {
+        orderDTO.setId(id); // Forziamo l’ID per sicurezza
+        OrderDTO updated = orderService.saveOrder(orderDTO);
+        return ResponseEntity.ok(updated);
+    }
 
+    // ✅ Checkout ordine (separato, se vuoi trattarlo diversamente)
     @PostMapping("/checkout")
-    public ResponseEntity<OrderDTO> saveOrder(@RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<OrderDTO> checkout(@RequestBody OrderDTO orderDTO) {
         OrderDTO saved = orderService.saveOrder(orderDTO);
         return ResponseEntity.ok(saved);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<OrderDTO> deleteOrder(@PathVariable long id) {
         OrderDTO deleted = orderService.deleteOrder(id);
