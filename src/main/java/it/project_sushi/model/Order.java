@@ -19,9 +19,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "id_product")
-    private Product product;
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<OrderDetail> orderDetails;
