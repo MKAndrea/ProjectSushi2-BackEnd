@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.project_sushi.service.ProductService;
@@ -54,27 +55,45 @@ public class ProductController {
 	    }
 
 	@PostMapping
-	public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) {
-		productDTO.setId(null);
-		ProductDTO created = productService.saveProduct(productDTO);
-		return ResponseEntity.ok(created);
+	public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO,
+	                                                @RequestParam String username,
+	                                                @RequestParam String password) {
+	    if (!username.equals("admin") || !password.equals("adminpass")) {
+	        return ResponseEntity.status(401).build(); // Unauthorized
+	    }
+
+	    productDTO.setId(null);
+	    ProductDTO created = productService.saveProduct(productDTO);
+	    return ResponseEntity.ok(created);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ProductDTO> updateProduct(@PathVariable long id, @RequestBody ProductDTO productDTO) {
-		productDTO.setId(id); 
-		try {
-			ProductDTO updated = productService.saveProduct(productDTO);
-			return ResponseEntity.ok(updated);
-		} catch (RuntimeException e) {
-			return ResponseEntity.notFound().build();
-		}
+	public ResponseEntity<ProductDTO> updateProduct(@PathVariable long id,
+	                                                @RequestBody ProductDTO productDTO,
+	                                                @RequestParam String username,
+	                                                @RequestParam String password) {
+	    if (!username.equals("admin") || !password.equals("adminpass")) {
+	        return ResponseEntity.status(401).build();
+	    }
+
+	    productDTO.setId(id);
+	    try {
+	        ProductDTO updated = productService.saveProduct(productDTO);
+	        return ResponseEntity.ok(updated);
+	    } catch (RuntimeException e) {
+	        return ResponseEntity.notFound().build();
+	    }
 	}
 
-	// DELETE product by ID
 	@DeleteMapping("/{id}")
-	public ResponseEntity<ProductDTO> deleteProduct(@PathVariable long id) {
-		ProductDTO deleted = productService.deleteProduct(id);
-		return (deleted != null) ? ResponseEntity.ok(deleted) : ResponseEntity.notFound().build();
+	public ResponseEntity<ProductDTO> deleteProduct(@PathVariable long id,
+	                                                @RequestParam String username,
+	                                                @RequestParam String password) {
+	    if (!username.equals("admin") || !password.equals("adminpass")) {
+	        return ResponseEntity.status(401).build();
+	    }
+	    ProductDTO deleted = productService.deleteProduct(id);
+	    return (deleted != null) ? ResponseEntity.ok(deleted) : ResponseEntity.notFound().build();
 	}
+
 }
