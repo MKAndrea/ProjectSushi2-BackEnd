@@ -136,14 +136,12 @@ public class OrderServiceImpl implements OrderService {
 
 
 
-
-
 	@Override
 	public OrderDTO deleteOrder(long id) {
 		OrderDTO order = orderRepository.findById(id)
 				.map(orderMapper::toDto)
 				.orElse(null);
-		productRepository.deleteById(id);
+		orderRepository.deleteById(id);
 		return order;
 	}
 
