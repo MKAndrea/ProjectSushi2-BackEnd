@@ -32,4 +32,12 @@ public class Product {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "category")
 	private Category category;
+	@Column(name = "active",nullable = false)
+	private Boolean active;
+	
+	@PrePersist
+	protected void onCreate() {
+	    this.active = true;  // Impostazione di default solo all'inserimento
+	}
+	
 }

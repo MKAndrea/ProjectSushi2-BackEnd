@@ -6,7 +6,8 @@ import java.util.List;
 
 
 public interface OrderService {
-	List<OrderDTO> getAllOrder();
+	List<OrderDTO> getAllOrderA();
+	List<OrderDTO> getAllOrderC();
 	OrderDTO getOrderById(long id);
 	OrderDTO saveOrder(OrderDTO orderDTO);
 	OrderDTO deleteOrder(long id);

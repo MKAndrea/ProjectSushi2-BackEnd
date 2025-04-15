@@ -2,14 +2,12 @@ package it.project_sushi.serviceImpl;
 
 import java.util.List;
 
-import it.project_sushi.model.Order;
 import it.project_sushi.model.Product;
 import it.project_sushi.model.dto.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.project_sushi.mapper.ProductMapper;
-import it.project_sushi.repository.OrderRepository;
 import it.project_sushi.repository.ProductRepository;
 import it.project_sushi.service.ProductService;
 
@@ -20,12 +18,19 @@ public class ProductServiceImpl implements ProductService {
 	private ProductRepository productRepository;
 	@Autowired
 	private ProductMapper productMapper;
-	@Autowired
-	private OrderRepository orderRepository;
 
 	@Override
 	public List<ProductDTO> getAllProduct() {
-		return productRepository.findAll().stream().map(productMapper::toDto).toList();
+	    return productRepository.findAll().stream()
+	            .filter(p -> Boolean.TRUE.equals(p.getActive())) // Mostra solo quelli attivi
+	            .map(productMapper::toDto)
+	            .toList();
+	}
+	public List<ProductDTO> getAllProductC() {
+		return productRepository.findAll().stream()
+	            .filter(p -> Boolean.FALSE.equals(p.getActive())) // Mostra solo quelli attivi
+	            .map(productMapper::toDto)
+	            .toList();
 	}
 	@Override
 	public String getProductImageByName(String name) {
@@ -66,21 +71,14 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ProductDTO deleteProduct(long id) {
-		// Elimina prima tutti i dettagli che usano questo prodotto
-		List<Order> orders = orderRepository.findAll();
-		for (Order order : orders) {
-			order.getOrderDetails().removeIf(detail -> 
-			detail.getProduct() != null && detail.getProduct().getId() == id
-					);
-		}
+	    Product product = productRepository.findById(id)
+	            .orElseThrow(() -> new RuntimeException("Prodotto non trovato con ID: " + id));
 
-		// Poi elimina il prodotto
-		ProductDTO product = productRepository.findById(id)
-				.map(productMapper::toDto)
-				.orElse(null);
+	    // Elimina logicamente (disattiva)
+	    product.setActive(false);
+	    productRepository.save(product);
 
-		productRepository.deleteById(id);
-		return product;
+	    return productMapper.toDto(product);
 	}
 
 }

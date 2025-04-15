@@ -29,8 +29,12 @@ public class ProductController {
 
 	
 	@GetMapping
-	public ResponseEntity<List<ProductDTO>> getAllProducts() {
+	public ResponseEntity<List<ProductDTO>> getAllProductsA() {
 		return ResponseEntity.ok(productService.getAllProduct());
+	}
+	@GetMapping("/deleted")
+	public ResponseEntity<List<ProductDTO>> getAllProductsC() {
+		return ResponseEntity.ok(productService.getAllProductC());
 	}
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductDTO> getProductById(@PathVariable long id) {

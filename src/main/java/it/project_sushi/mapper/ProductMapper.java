@@ -11,9 +11,8 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
 	ProductMapper ISTANCE=Mappers.getMapper(ProductMapper.class);
-
 	ProductDTO toDto(Product product);
-
+	@Mapping(target = "active", ignore = true)
 	Product toEntity(ProductDTO dto);
 
 	@Named("toDtoForOrder")
@@ -27,11 +26,11 @@ public interface ProductMapper {
 	    dto.setId(product.getId());
 	    dto.setName(product.getName());
 	    dto.setProductImage(product.getProductImage());
-	    dto.setPrice(product.getPrice() * quantity); // Calcolo prezzo totale
+	    dto.setPrice(product.getPrice()); // Calcolo prezzo totale
 	    return dto;
 	}
 	
-	
+	@Mapping(target = "active", ignore = true)
 	void updateFromDto(ProductDTO dto,@MappingTarget Product product);
 
 }

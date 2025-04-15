@@ -25,8 +25,13 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping
-    public ResponseEntity<List<OrderDTO>> getAllOrders() {
-        List<OrderDTO> orders = orderService.getAllOrder();
+    public ResponseEntity<List<OrderDTO>> getAllOrdersA() {
+        List<OrderDTO> orders = orderService.getAllOrderA();
+        return ResponseEntity.ok(orders);
+    }
+    @GetMapping("/Deleted")
+    public ResponseEntity<List<OrderDTO>> getAllOrdersC() {
+        List<OrderDTO> orders = orderService.getAllOrderC();
         return ResponseEntity.ok(orders);
     }
 

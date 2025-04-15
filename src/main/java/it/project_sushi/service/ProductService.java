@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface ProductService {
 	List<ProductDTO> getAllProduct();
+	List<ProductDTO> getAllProductC();
 	ProductDTO getProductById(long id);
 	String getProductImageByName(String name);
 	List<ProductDTO> getProductsByCategory(Product.Category category);
