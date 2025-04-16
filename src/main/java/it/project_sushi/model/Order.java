@@ -23,7 +23,6 @@ public class Order {
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<OrderDetail> orderDetails;
     
-
     @PrePersist
     protected void onCreate() {
         this.active = true;

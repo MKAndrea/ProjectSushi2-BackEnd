@@ -36,20 +36,22 @@ public class ProductServiceImpl implements ProductService {
 	public String getProductImageByName(String name) {
 		return productRepository.findByName(name).stream()
 				.findFirst()
+				.filter(product -> Boolean.TRUE.equals(product.getActive()))
 				.map(Product::getProductImage)
 				.orElse(null);
 	}
 	@Override
 	public List<ProductDTO> getProductsByCategory(Product.Category category) {
-		return productRepository.findByCategory(category)
-				.stream()
-				.map(productMapper::toDto)
-				.toList();
+	    return productRepository.findByCategory(category).stream()
+	            .filter(product -> Boolean.TRUE.equals(product.getActive())) // ✅ Mostra solo attivi
+	            .map(productMapper::toDto)
+	            .toList();
 	}
 
 	@Override
 	public ProductDTO getProductById(long id) {
 		return productRepository.findById(id)
+				.filter(product -> Boolean.TRUE.equals(product.getActive()))
 				.map(productMapper::toDto)
 				.orElse(null);
 	}
