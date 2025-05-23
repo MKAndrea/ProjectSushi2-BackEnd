@@ -27,7 +27,6 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 
-	
 	@GetMapping
 	public ResponseEntity<List<ProductDTO>> getAllProductsA() {
 		return ResponseEntity.ok(productService.getAllProduct());
@@ -41,63 +40,63 @@ public class ProductController {
 		ProductDTO product = productService.getProductById(id);
 		return (product != null) ? ResponseEntity.ok(product) : ResponseEntity.notFound().build();
 	}
-	
+
 	@GetMapping("/category/{category}")
 	public ResponseEntity<List<ProductDTO>> getByCategory(@PathVariable Product.Category category) {
-	    List<ProductDTO> products = productService.getProductsByCategory(category);
-	    return ResponseEntity.ok(products);
+		List<ProductDTO> products = productService.getProductsByCategory(category);
+		return ResponseEntity.ok(products);
 	}
-	
+
 	@GetMapping("/image/{name}")
 	public ResponseEntity<String> getProductImageName(@PathVariable String name) {
-	    String imageName = productService.getProductImageByName(name);
-	    if (imageName != null) {
-	        return ResponseEntity.ok(imageName);
-	    } else {
-	        return ResponseEntity.notFound().build();
-	    }
-	    }
+		String imageName = productService.getProductImageByName(name);
+		if (imageName != null) {
+			return ResponseEntity.ok(imageName);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
 
 	@PostMapping
 	public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO,
-	                                                @RequestParam String username,
-	                                                @RequestParam String password) {
-	    if (!username.equals("admin") || !password.equals("adminpass")) {
-	        return ResponseEntity.status(401).build(); // Unauthorized
-	    }
+			@RequestParam String username,
+			@RequestParam String password) {
+		if (!username.equals("admin") || !password.equals("adminpass")) {
+			return ResponseEntity.status(401).build(); // Unauthorized
+		}
 
-	    productDTO.setId(null);
-	    ProductDTO created = productService.saveProduct(productDTO);
-	    return ResponseEntity.ok(created);
+		productDTO.setId(null);
+		ProductDTO created = productService.saveProduct(productDTO);
+		return ResponseEntity.ok(created);
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<ProductDTO> updateProduct(@PathVariable long id,
-	                                                @RequestBody ProductDTO productDTO,
-	                                                @RequestParam String username,
-	                                                @RequestParam String password) {
-	    if (!username.equals("admin") || !password.equals("adminpass")) {
-	        return ResponseEntity.status(401).build();
-	    }
+			@RequestBody ProductDTO productDTO,
+			@RequestParam String username,
+			@RequestParam String password) {
+		if (!username.equals("admin") || !password.equals("adminpass")) {
+			return ResponseEntity.status(401).build();
+		}
 
-	    productDTO.setId(id);
-	    try {
-	        ProductDTO updated = productService.saveProduct(productDTO);
-	        return ResponseEntity.ok(updated);
-	    } catch (RuntimeException e) {
-	        return ResponseEntity.notFound().build();
-	    }
+		productDTO.setId(id);
+		try {
+			ProductDTO updated = productService.saveProduct(productDTO);
+			return ResponseEntity.ok(updated);
+		} catch (RuntimeException e) {
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ProductDTO> deleteProduct(@PathVariable long id,
-	                                                @RequestParam String username,
-	                                                @RequestParam String password) {
-	    if (!username.equals("admin") || !password.equals("adminpass")) {
-	        return ResponseEntity.status(401).build();
-	    }
-	    ProductDTO deleted = productService.deleteProduct(id);
-	    return (deleted != null) ? ResponseEntity.ok(deleted) : ResponseEntity.notFound().build();
+			@RequestParam String username,
+			@RequestParam String password) {
+		if (!username.equals("admin") || !password.equals("adminpass")) {
+			return ResponseEntity.status(401).build();
+		}
+		ProductDTO deleted = productService.deleteProduct(id);
+		return (deleted != null) ? ResponseEntity.ok(deleted) : ResponseEntity.notFound().build();
 	}
 
 }
